@@ -1,26 +1,46 @@
 package com.qinlei.share;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class FileUtil {
 	static PrintWriter pw = null;
 	
-	static PrintWriter getFileOutputStream(String fileName){
+	static void initializeAPrintWriter(String fileName){
 		try {
-			if(pw == null) pw = new PrintWriter(new FileOutputStream(new File(fileName)));
+			if(pw == null) {
+				pw = new PrintWriter(new FileWriter(fileName,true));
+				System.out.println(fileName + " has been created!");
+			}
 		} catch (FileNotFoundException e) {
 			System.out.println("Failed to create or open a file ");
 			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return pw;
 	}
 	static void closeFileOutputStream(){
 		if(pw != null) {
 			pw.flush();
 			pw.close();
+			pw = null;
+		}
+	}
+	
+	static boolean saveALine(String str){
+		if(pw != null) {
+			pw.println(str);
+			return true;
+		}
+		System.out.println("PrintWriter has not been inistiallied!");
+		return false;
+	}
+	static void flush(){
+		if(pw != null) {
+			pw.flush();
 		}
 	}
 	/**
