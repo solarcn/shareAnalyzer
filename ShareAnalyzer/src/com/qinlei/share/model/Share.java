@@ -1,4 +1,5 @@
 package com.qinlei.share.model;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -8,7 +9,7 @@ public class Share {
 	private double high;
 	private double low;
 	private double close;
-	private double volume;
+	private int volume;
 	private double totalValue;
 
 	public Date getDate() {
@@ -51,11 +52,11 @@ public class Share {
 		this.close = close;
 	}
 
-	public double getVolume() {
+	public int getVolume() {
 		return volume;
 	}
 
-	public void setVolume(double volume) {
+	public void setVolume(int volume) {
 		this.volume = volume;
 	}
 
@@ -65,6 +66,14 @@ public class Share {
 
 	public void setTotalValue(double totalValue) {
 		this.totalValue = totalValue;
+	}
+	
+	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		return String
+				.format("Date: %s Open: %7.2f High: %7.2f Low: %7.2f Close: %7.2f Volume: %15d TotalValue: %15.2f",
+						sdf.format(date), open, high, low, close, volume,
+						totalValue);
 	}
 
 	/**
