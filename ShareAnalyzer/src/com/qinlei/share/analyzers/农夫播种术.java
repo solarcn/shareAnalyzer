@@ -1,12 +1,11 @@
 package com.qinlei.share.analyzers;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import com.qinlei.share.loader.SharePriceLoader;
 import com.qinlei.share.loader.THSCSVLoder;
-import com.qinlei.share.model.FileType;
 import com.qinlei.share.model.Share;
 
 public class 农夫播种术 {
@@ -17,14 +16,10 @@ public class 农夫播种术 {
 		double price = share.getOpen();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(share.getDate());
-		// System.out.print(cal.get(Calendar.YEAR) +
-		// "年"+(cal.get(Calendar.MONTH)+1) +"月" +
-		// cal.get(Calendar.DATE)+"日买入 " + volume + "股 at ￥" + share.getOpen());
-		// System.out.print(SDF.format(share.getDate()) + "买入    " + volume +
-		// "股 at ￥" + share.getOpen());
-		System.out.printf("%s 买入     %7d股 at ￥%8.2f", SDF.format(share.getDate()),
+
+		System.out.printf("%s 买入               %7d股 at ￥%8.2f", SDF.format(share.getDate()),
 				volume, share.getOpen());
-		return price * volume;
+		return price * volume; 
 	}
 
 	double sellAShare(Share share, int volume) {
@@ -34,29 +29,22 @@ public class 农夫播种术 {
 		// System.out.print(SDF.format(share.getDate()) + "   卖出 " + volume +
 		// "股 at ￥" + share.getOpen());
 		System.out.printf("%s     卖出 %7d股 at ￥%8.2f", SDF.format(share.getDate()),
-				volume, share.getOpen());
+				volume, share.getOpen());  
 		return price * volume;
 	}
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// SharePriceLoader spl = new
-		// SharePriceLoader(FileType.MYDOWNLOADFROMYAHOO,
-		// "./shareData/中国银行.csv");
-		// List<Share> shareList = spl.sharePrices;
-
-		List<Share> shareList;
-		try {
-			shareList = THSCSVLoder.getShareListTHSCSV("./shareData/zgyh.csv");
-		} catch (Exception e) {
-			System.out.println("Failed to read from csv!");
-			e.printStackTrace();
-			return;
+	
+	static void  analyze(List<Share> shareList , Date from, Date to){
+		for(Share share : shareList){
+			if(share.getDate().before(from) || share.getDate().after(to)) shareList.remove(share);
 		}
-		;
-
+		analyze(shareList);
+	}
+//	static void  analyze(List<Share> shareList, Date from, Date to){
+//		
+//	}
+	
+	
+	static void  analyze(List<Share> shareList){
 		Share currentShare = null;
 		final int volume = 1000;
 		int size = shareList.size();
@@ -108,6 +96,20 @@ public class 农夫播种术 {
 			}
 			
 		} // end of for
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// SharePriceLoader spl = new
+		// SharePriceLoader(FileType.MYDOWNLOADFROMYAHOO,
+		// "./shareData/中国银行.csv");
+		// List<Share> shareList = spl.sharePrices;
+
+		List<Share> shareList;
+		shareList = THSCSVLoder.getShareListTHSCSV("./shareData/zgyh.csv");
+		农夫播种术.analyze(shareList);
 
 	} // end of main
 

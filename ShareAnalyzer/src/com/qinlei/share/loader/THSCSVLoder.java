@@ -1,6 +1,7 @@
 package com.qinlei.share.loader;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class THSCSVLoder {
 		return processors;
 	}
 
-	public static List<Share> getShareListTHSCSV(String fileName) throws Exception {
+	public static List<Share> getShareListTHSCSV(String fileName) {
 		ICsvBeanReader beanReader = null;
 		List<Share> shareList= new ArrayList<Share>();
 		try {
@@ -58,9 +59,17 @@ public class THSCSVLoder {
 				if(DEBUG) System.out.println(share);
 			}
 
-		} finally {
+		} catch (IOException e){
+			System.out.println("Something Wrong when reading the file");
+			e.printStackTrace();
+		}finally {
 			if (beanReader != null) {
-				beanReader.close();
+				try {
+					beanReader.close();
+				} catch (IOException e) {
+					System.out.println("Something Wrong when closing the Reader");
+					e.printStackTrace();
+				}
 			}
 		}
 		return shareList;
