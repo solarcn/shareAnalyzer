@@ -109,6 +109,8 @@ public class 农夫播种术 {
 
 		List<Share> shareList;
 		shareList = THSCSVLoder.getShareListTHSCSV("./shareData/zgyh.csv");
+		
+		
 		农夫播种术.analyze(shareList);
 
 	} // end of main
